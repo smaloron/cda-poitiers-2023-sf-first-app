@@ -1,0 +1,13 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <h1>Liste des auteurs</h1>
+
+    <a href="{{ path('author_details', {'id': 7}) }}">
+        détails de l'auteur 7
+    </a>
+
+    <a href="{{ path('author_details', {'id': 8}) }}">
+        détails de l'auteur 8
+    </a>
+{% endblock %}
