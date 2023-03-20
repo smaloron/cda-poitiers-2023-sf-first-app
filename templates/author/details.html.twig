@@ -1,7 +1,11 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <h1>Détails d'un auteur dont l'id est {{ id }}</h1>
+    <h1>Détails de {{ author.firstName }} {{ author.name }}</h1>
+
+    <p>
+        {{ author.bio }}
+    </p>
 
     <a href="{{ path('author_home') }}">Retour à la liste</a>
 {% endblock %}
