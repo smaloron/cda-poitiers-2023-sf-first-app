@@ -2,14 +2,16 @@
 
 namespace App\Controller;
 
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-class HomeController
+class HomeController extends AbstractController
 {
     function index(): Response{
-        return new Response("Hello Symfony");
+        return $this->render('home.html.twig');
     }
 
 
@@ -22,10 +24,20 @@ class HomeController
     #[Route('/details/{id}/{name}',
         name: 'details',
         requirements: ['id' => '\d+'],
-        defaults: ['id' => 1, 'name' => 'Olive'],
-        methods: ['POST']
+        defaults: ['id' => 1, 'name' => 'Olive']
     )]
     public function details(string $name, int $id = 1) : Response{
-        return new Response("Bonjour $name votre id est $id");
+        $product = new \stdClass();
+        $product->price = 10000000;
+        $product->name = 'âme';
+
+        return $this->render(
+            'home/details.html.twig',
+            [
+                'name'=> $name, 'id'=>$id,
+                'person' => ['name' => 'Hugo', 'firstName' => 'Victor'],
+                'scores' => [1,6,8,3],
+                'prod' => $product
+            ]);
     }
 }
