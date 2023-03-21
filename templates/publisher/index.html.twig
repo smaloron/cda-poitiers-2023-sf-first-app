@@ -1,0 +1,13 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Hello PublisherController!{% endblock %}
+
+{% block content %}
+
+    <ul>
+        {% for publisher in publisherList %}
+            <li>{{ publisher.name }} {{ publisher.city }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
