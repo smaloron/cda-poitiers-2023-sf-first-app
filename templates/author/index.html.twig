@@ -3,14 +3,32 @@
 {% block content %}
     <h1>Liste des auteurs</h1>
 
+    <p>Il y a {{ authorList | length }} auteurs</p>
 
     <ul>
     {% for author in authorList %}
         <li>
             <a href="{{ path('author_details', {'id': author.id}) }}">
-                {{ author.firstName }} {{ author.name }}
+
+                <span style="{{ author.id is divisible by (2) ? 'font-weight:bold': ''}}">
+                    {{ author.firstName }} {{ author.name | upper | first}}
+                </span>
+                {#
+                <span style="{% if author.id > 3 %} font-weight:bold {% endif %}">
+                    {{ author.firstName }} {{ author.name }}
+                </span>
+                #}
+{#
+                {% if author.id > 3 %}
+                    <strong>{{ author.firstName }} {{ author.name }}</strong>
+                {% else %}
+                    {{ author.firstName }} {{ author.name }}
+                {% endif %}
+#}
             </a>
         </li>
+    {% else %}
+        <p>Il n'y a pas d'auteurs</p>
     {% endfor %}
     </ul>
 
