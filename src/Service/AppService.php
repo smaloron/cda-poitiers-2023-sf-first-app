@@ -40,4 +40,11 @@ class AppService
         }
     }
 
+    public function getRoutesForNavbar(): array{
+        return [
+            ['label' => 'Accueil', 'route' => 'home'],
+            ['label' => 'Liste des auteurs', 'route' => 'author_home']
+        ];
+    }
+
 }

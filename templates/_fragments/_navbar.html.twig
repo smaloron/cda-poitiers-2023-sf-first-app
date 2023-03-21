@@ -1,4 +1,4 @@
-{{ appService.name }}
+
 <style>
     .active {
         border-bottom: 1px solid red;
@@ -12,15 +12,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link {{ app.current_route=='home'?'active': '' }}"
-                       href="{{ path('home') }}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ app.current_route=='author_home'?'active': '' }}"
-                       href="{{ path('author_home') }}">Auteurs</a>
-                </li>
-
+                {% for item in appService.routesForNavbar %}
+                    <li class="nav-item">
+                        <a class="nav-link {{ app.current_route == item.route? 'active': '' }}"
+                           href="{{ path(item.route) }}">
+                            {{ item.label }}
+                        </a>
+                    </li>
+                {% endfor %}
             </ul>
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

@@ -1,0 +1,11 @@
+ -------------------- -------- -------- ------ ---------------------- ----------------------------------------------- 
+  Name                 Method   Scheme   Host   Path                   Controller                                     
+ -------------------- -------- -------- ------ ---------------------- ----------------------------------------------- 
+  author_home          ANY      ANY      ANY    /author/               App\Controller\AuthorController::index()       
+  author_details       ANY      ANY      ANY    /author/{id}           App\Controller\AuthorController::details()     
+  another_home         ANY      ANY      ANY    /home2                 App\Controller\HomeController::anotherIndex()  
+  again_another_home   ANY      ANY      ANY    /home3                 App\Controller\HomeController::anotherIndex()  
+  details              ANY      ANY      ANY    /details/{id}/{name}   App\Controller\HomeController::details()       
+  home                 ANY      ANY      ANY    /home                  App\Controller\HomeController::index()         
+ -------------------- -------- -------- ------ ---------------------- ----------------------------------------------- 
+

@@ -5,6 +5,8 @@
 
     <p>Il y a {{ authorList | length }} auteurs</p>
 
+    {{ dump(authorList) }}
+
     <ul>
     {% for author in authorList %}
         <li>

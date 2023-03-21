@@ -30,6 +30,9 @@ class AuthorController extends AbstractController
 
     #[Route('/{id}', name: 'author_details', requirements: ['id'=>'\d+'])]
     public function details(int $id): Response{
+
+        dump($this->service);
+
         return $this->render('author/details.html.twig', [
             'id' => $id,
             'author' => $this->service->getAuthor($id)
