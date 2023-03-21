@@ -1,6 +1,11 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
 
+    globals:
+        appName: 'Ma superbe Appli Symfony'
+        numOfRows: '%number_of_rows%'
+        appService: '@App\Service\AppService'
+
 when@test:
     twig:
         strict_variables: true
