@@ -13,7 +13,7 @@
             <a href="{{ path('author_details', {'id': author.id}) }}">
 
                 <span style="{{ author.id is divisible by (2) ? 'font-weight:bold': ''}}">
-                    {{ author.firstName }} {{ author.name | upper | first}}
+                    {{ author.firstName }} {{ author.lastName | upper}}
                 </span>
                 {#
                 <span style="{% if author.id > 3 %} font-weight:bold {% endif %}">
