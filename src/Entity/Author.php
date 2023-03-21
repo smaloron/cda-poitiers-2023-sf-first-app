@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AuthorRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
@@ -19,6 +20,9 @@ class Author
 
     #[ORM\Column(length: 50)]
     private ?string $lastName = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $bio = null;
 
     public function getId(): ?int
     {
@@ -45,6 +49,18 @@ class Author
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): self
+    {
+        $this->bio = $bio;
 
         return $this;
     }
