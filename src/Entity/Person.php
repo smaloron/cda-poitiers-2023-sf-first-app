@@ -23,7 +23,7 @@ class Person
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateOfBirth = null;
 
-    #[ORM\ManyToOne(inversedBy: 'persons')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'persons')]
     private ?Address $address = null;
 
     public function getId(): ?int

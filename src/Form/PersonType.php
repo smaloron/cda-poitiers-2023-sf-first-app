@@ -20,6 +20,7 @@ class PersonType extends AbstractType
                 'widget' => 'single_text'
             ])
             ->add('address', AddressType::class)
+
             ->add('Valider', SubmitType::class)
         ;
     }
