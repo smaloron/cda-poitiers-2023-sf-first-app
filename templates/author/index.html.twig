@@ -5,33 +5,40 @@
 
     <p>Il y a {{ authorList | length }} auteurs</p>
 
-    {{ dump(authorList) }}
+    <div class="mt-3 mb-3">
+        <a class="btn btn-primary" href="{{ path('author_insert_form') }}">
+            Ajouter un auteur
+        </a>
+    </div>
 
-    <ul>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Auteur</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
     {% for author in authorList %}
-        <li>
-            <a href="{{ path('author_details', {'id': author.id}) }}">
+        <tr>
+            <td>
+                <a href="{{ path('author_details', {'id': author.id}) }}">
 
-                <span style="{{ author.id is divisible by (2) ? 'font-weight:bold': ''}}">
-                    {{ author.firstName }} {{ author.lastName | upper}}
-                </span>
-                {#
-                <span style="{% if author.id > 3 %} font-weight:bold {% endif %}">
-                    {{ author.firstName }} {{ author.name }}
-                </span>
-                #}
-{#
-                {% if author.id > 3 %}
-                    <strong>{{ author.firstName }} {{ author.name }}</strong>
-                {% else %}
-                    {{ author.firstName }} {{ author.name }}
-                {% endif %}
-#}
-            </a>
-        </li>
+                    <span style="{{ author.id is divisible by (2) ? 'font-weight:bold': ''}}">
+                        {{ author.firstName }} {{ author.lastName | upper}}
+                    </span>
+                </a>
+            </td>
+            <td>
+                <a class="btn btn-secondary"
+                   href="{{ path('author_update_form', {'id': author.id}) }}">
+                    Modifier
+                </a>
+
+            </td>
+        </tr>
     {% else %}
         <p>Il n'y a pas d'auteurs</p>
     {% endfor %}
-    </ul>
+    </table>
 
 {% endblock %}

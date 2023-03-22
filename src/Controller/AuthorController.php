@@ -83,14 +83,11 @@ class AuthorController extends AbstractController
     public function form(
         Request $request,
         EntityManagerInterface $em,
-        AuthorRepository $repository,
-        int $id = null
+        Author $author = null
     ): Response{
         // Création de l'entité
-        if($id === null){
+        if($author === null){
             $author = new Author();
-        } else {
-            $author = $repository->find($id);
         }
 
         // Création du formulaire
