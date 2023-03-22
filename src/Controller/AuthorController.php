@@ -86,8 +86,10 @@ class AuthorController extends AbstractController
         Author $author = null
     ): Response{
         // Création de l'entité
+        $actionName = 'modification';
         if($author === null){
             $author = new Author();
+            $actionName = 'ajout';
         }
 
         // Création du formulaire
@@ -106,6 +108,8 @@ class AuthorController extends AbstractController
             $em->persist($author);
             $em->flush();
 
+            $this->addFlash('success', "votre $actionName est un succès");
+
             // redirection
             return $this->redirectToRoute('author_home');
         }
@@ -115,6 +119,23 @@ class AuthorController extends AbstractController
         return $this->render('author/form.html.twig', [
             'authorForm' => $form->createView()
         ]);
+    }
+
+    #[Route('/delete/{id}', name: 'author_delete', requirements: ['id'=> '\d+'])]
+    public function delete(int $id, AuthorRepository $repository){
+        try {
+            $author = $repository->find($id);
+            $authorName = $author->getLastName();
+
+            $repository->remove($author, true);
+
+            $this->addFlash('success', "Cet auteur $authorName a été supprimé");
+
+            return $this->redirectToRoute('author_home');
+        } catch (\Throwable $ex){
+            $this->addFlash('error', "Impossible de trouver l'auteur à supprimer");
+            return $this->redirectToRoute('author_home');
+        }
     }
 
 }
