@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/author')]
 class AuthorController extends AbstractController
@@ -73,7 +74,9 @@ class AuthorController extends AbstractController
         // execution de l'opération
         $manager->flush();
 
-        return $this->render('author/new.html.twig', ['author' => $author]);
+        return $this->render('author/new.html.twig', [
+            'author' => $author
+        ]);
     }
 
     #[Route('/form', name: 'author_insert_form')]
@@ -83,8 +86,11 @@ class AuthorController extends AbstractController
     public function form(
         Request $request,
         EntityManagerInterface $em,
+        ValidatorInterface $validator,
         Author $author = null
     ): Response{
+
+        $errors = [];
         // Création de l'entité
         $actionName = 'modification';
         if($author === null){
@@ -96,12 +102,17 @@ class AuthorController extends AbstractController
         $form = $this->createForm(
             AuthorType::class,
             $author,
-            []
+            [
+                'attr' => ['novalidate'=>'novalidate']
+            ]
         );
 
         // hydratation du formulaire
         $form->handleRequest($request);
 
+        if($form->isSubmitted()){
+            $errors = $validator->validate($author);
+        }
         // Traitement des données postées
         if($form->isSubmitted() && $form->isValid()){
             // Sauvegarde
@@ -117,7 +128,8 @@ class AuthorController extends AbstractController
 
         // Affichage de la vue
         return $this->render('author/form.html.twig', [
-            'authorForm' => $form->createView()
+            'authorForm' => $form->createView(),
+            'errors' => $errors
         ]);
     }
 
