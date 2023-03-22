@@ -20,10 +20,10 @@ class Book
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $publishedAt = null;
 
-    #[ORM\ManyToOne(targetEntity: Author::class)]
+    #[ORM\ManyToOne(targetEntity: Author::class, fetch: 'EAGER', inversedBy: 'books')]
     private ?Author $author = null;
 
-    #[ORM\ManyToOne(targetEntity: Publisher::class)]
+    #[ORM\ManyToOne(targetEntity: Publisher::class, fetch: 'EAGER', inversedBy: 'books')]
     private ?Publisher $publisher = null;
 
     public function getId(): ?int

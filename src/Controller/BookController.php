@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Form\BookType;
+use App\Repository\BookRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +14,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookController extends AbstractController
 {
 
-
+    #[Route('/', name: 'index')]
+    public function index(BookRepository $repository){
+        return $this->render(
+            'book/index.html.twig',
+            ['bookList'=> $repository->findAll()]
+        );
+    }
 
     #[Route('/form', name: 'insert_form')]
     public function form(Request $request, EntityManagerInterface $em){
