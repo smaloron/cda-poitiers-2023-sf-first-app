@@ -11,7 +11,25 @@
     </ul>
 {% endif %}
 
-    {{ form(authorForm) }}
+    {{ form_start(authorForm) }}
+        <fieldset class="bg-secondary p-3">
+            <legend>Contact</legend>
+            <div class="row">
+                <div class="col">
+                    {{ form_label(authorForm.firstName) }}
+                    {{ form_widget(authorForm.firstName) }}
+                </div>
+
+                <div class="col">
+                    {{ form_label(authorForm.lastName) }}
+                    {{ form_widget(authorForm.lastName) }}
+                    {{ form_errors(authorForm.lastName) }}
+                </div>
+            </div>
+        </fieldset>
+
+
+    {{ form_end(authorForm) }}
 
 {% endblock %}
 
