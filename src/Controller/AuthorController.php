@@ -76,10 +76,22 @@ class AuthorController extends AbstractController
         return $this->render('author/new.html.twig', ['author' => $author]);
     }
 
-    #[Route('/form', name: 'author_form')]
-    public function form(Request $request, EntityManagerInterface $em): Response{
+    #[Route('/form', name: 'author_insert_form')]
+    #[Route('/form/{id}',
+            name: 'author_update_form',
+            requirements: ['id'=>'\d+'])]
+    public function form(
+        Request $request,
+        EntityManagerInterface $em,
+        AuthorRepository $repository,
+        int $id = null
+    ): Response{
         // Création de l'entité
-        $author = new Author();
+        if($id === null){
+            $author = new Author();
+        } else {
+            $author = $repository->find($id);
+        }
 
         // Création du formulaire
         $form = $this->createForm(
