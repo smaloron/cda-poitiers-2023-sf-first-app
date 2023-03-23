@@ -15,6 +15,7 @@
                 <th>LastName</th>
                 <th>DateOfBirth</th>
                 <th>DailyRate</th>
+                <th>#skills</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -26,6 +27,7 @@
                 <td>{{ teacher.lastName }}</td>
                 <td>{{ teacher.dateOfBirth ? teacher.dateOfBirth|date('Y-m-d') : '' }}</td>
                 <td>{{ teacher.dailyRate }}</td>
+                <td>{{ teacher.skills | length }}</td>
                 <td>
 
                     <a href="{{ path('app_teacher_show', {'id': teacher.id}) }}">show</a>

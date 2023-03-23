@@ -27,6 +27,17 @@
                 <th>DailyRate</th>
                 <td>{{ teacher.dailyRate }}</td>
             </tr>
+            <tr>
+                <th>Skills</th>
+                <td>
+                    <ul>
+                        {% for item in teacher.skills %}
+                            <li>{{ item.skillName }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+
+            </tr>
         </tbody>
     </table>
 
