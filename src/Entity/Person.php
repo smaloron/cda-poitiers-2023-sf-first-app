@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
-#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\InheritanceType('JOINED')]
 #[ORM\DiscriminatorColumn(name: 'person_type', type: 'string')]
 #[ORM\DiscriminatorMap([
     'person' => Person::class,
