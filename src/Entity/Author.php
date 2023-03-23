@@ -37,7 +37,7 @@ class Author
     private ?string $bio = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Book::class)]
-    private ArrayCollection $books;
+    private Collection $books;
 
     public function __construct()
     {

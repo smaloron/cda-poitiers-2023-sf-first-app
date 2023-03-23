@@ -23,7 +23,7 @@ class Publisher
     private ?string $city = null;
 
     #[ORM\OneToMany(mappedBy: 'publisher', targetEntity: Book::class)]
-    private ArrayCollection $books;
+    private Collection $books;
 
     public function __construct()
     {

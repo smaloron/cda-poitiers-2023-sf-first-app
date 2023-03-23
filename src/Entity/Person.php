@@ -7,6 +7,13 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'person_type', type: 'string')]
+#[ORM\DiscriminatorMap([
+    'person' => Person::class,
+    'student' => Student::class,
+    'teacher' => Teacher::class
+])]
 class Person
 {
     #[ORM\Id]
@@ -23,7 +30,7 @@ class Person
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateOfBirth = null;
 
-    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'persons')]
+    #[ORM\ManyToOne(targetEntity: Address::class, cascade: ['persist'], inversedBy: 'persons')]
     private ?Address $address = null;
 
     public function getId(): ?int
