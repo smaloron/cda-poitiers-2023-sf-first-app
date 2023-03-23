@@ -12,7 +12,7 @@ class Teacher extends Person
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: 'teacherId')]
     private ?int $id = null;
 
     #[ORM\Column]
@@ -28,7 +28,7 @@ class Teacher extends Person
 
     public function getId(): ?int
     {
-        return $this->id;
+        return parent::getId();
     }
 
     public function getDailyRate(): ?int
