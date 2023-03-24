@@ -39,6 +39,18 @@ class ArticleRepository extends ServiceEntityRepository
         }
     }
 
+    public function getArticlecountByAuthor(){
+        $qb = $this
+            ->createQueryBuilder('article')
+            ->select('a.id as author_id, a.nickName, count(article.id) as nb')
+            ->join('article.author', 'a')
+            ->groupBy('a.id');
+
+        //dump($qb->getQuery()->getDQL());
+
+        return $qb->getQuery();
+    }
+
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */

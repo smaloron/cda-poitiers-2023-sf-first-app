@@ -25,7 +25,9 @@
             {% block content %}{% endblock %}
         </div>
         <aside class="col-3">
-            {% block aside %}{% endblock %}
+            {% block aside %}
+                {{ render(controller('App\\Controller\\BlogController::aside')) }}
+            {% endblock %}
         </aside>
     </div>
 

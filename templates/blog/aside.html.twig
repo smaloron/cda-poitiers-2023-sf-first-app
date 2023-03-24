@@ -1,0 +1,16 @@
+
+
+
+    <h4>Liste des auteurs</h4>
+    <ul class="list-group">
+        {% for item in countByAuthor %}
+            <li class="list-group-item">
+                <a href="{{ path('blog_by_author', {'id': item.author_id}) }}">
+                {{ item.nickName }}&nbsp;({{ item.nb }})
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+
+

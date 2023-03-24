@@ -26,7 +26,7 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'details')]
+    #[Route('/{id}', name: 'details', requirements: ['id'=> '\d+'])]
     public function details(
         Article $article,
         Request $request,
@@ -81,6 +81,15 @@ class BlogController extends AbstractController
             'articleList' => $articleList,
             'title' => 'Liste des articles par auteur',
             'crit' => $author->getNickName()
+        ]);
+    }
+
+    #[Route('/aside', name: 'aside')]
+    public function aside(ArticleRepository $repository){
+        $countByAuthor = $repository->getArticlecountByAuthor()->getArrayResult();
+
+        return $this->render('blog/aside.html.twig', [
+            'countByAuthor' => $countByAuthor
         ]);
     }
 }
