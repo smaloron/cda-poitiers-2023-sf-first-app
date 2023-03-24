@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Author;
 use App\Entity\Comment;
+use App\Entity\Tag;
 use App\Entity\Theme;
 use App\Entity\User;
 use App\Form\CommentType;
@@ -84,12 +85,22 @@ class BlogController extends AbstractController
         ]);
     }
 
+    #[Route('/by-tag/{id}', name: 'by_tag')]
+    public function  byTag(Tag $tag, ArticleRepository $repository): Response {
+        return $this->render('blog/list.html.twig', [
+        'articleList' => $repository->getArticlesByTag($tag),
+            'title' => 'Liste des articles par tag',
+            'crit' => $tag->getTagName()
+        ]);
+    }
+
     #[Route('/aside', name: 'aside')]
     public function aside(ArticleRepository $repository){
         $countByAuthor = $repository->getArticlecountByAuthor()->getArrayResult();
 
         return $this->render('blog/aside.html.twig', [
-            'countByAuthor' => $countByAuthor
+            'countByAuthor' => $countByAuthor,
+            'countByTag' => $repository->getArticleCountByTag()
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Article;
+use App\Entity\Tag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -46,9 +47,25 @@ class ArticleRepository extends ServiceEntityRepository
             ->join('article.author', 'a')
             ->groupBy('a.id');
 
-        //dump($qb->getQuery()->getDQL());
-
         return $qb->getQuery();
+    }
+
+    public function getArticleCountByTag(){
+        return $this->createQueryBuilder('article')
+            ->innerJoin('article.tags', 't')
+            ->groupBy('t.id')
+            ->select('t.id, t.tagName, count(article.id) as nb')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function getArticlesByTag(Tag $tag){
+        return $this->createQueryBuilder('a')
+            ->select('a')
+            ->join('a.tags', 't')
+            ->where('t.tagName=:tagName')
+            ->setParameter(':tagName', $tag->getTagName())
+            ->getQuery()->getResult();
     }
 
 //    /**
