@@ -16,7 +16,11 @@
         <tbody>
             {% for article in articleList %}
                 <tr>
-                    <td>{{ article.title }}</td>
+                    <td>
+                        <a href="{{ path('blog_details', {'id': article.id}) }}">
+                        {{ article.title }}
+                        </a>
+                    </td>
                     <td> {{ article.author.nickName }} </td>
                     <td> {{ article.publishedAt | date('d/m/Y') }}</td>
                     <td> {{ article.comments | length }}</td>
