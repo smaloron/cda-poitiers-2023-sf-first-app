@@ -10,6 +10,8 @@
             </a>
         ({{ article.author.firstName }} {{ article.author.lastName | upper}})
         <br>
+        Note : {{ rating }}
+        <br>
         theme : <a href="{{ path('blog_by_theme', {'id': article.theme.id}) }}">{{ article.theme.themeName }}</a>
     </p>
     <p>

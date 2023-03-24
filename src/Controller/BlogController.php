@@ -23,7 +23,7 @@ class BlogController extends AbstractController
     public function index(ArticleRepository $repository): Response
     {
         return $this->render('blog/index.html.twig', [
-            'articleList' => $repository->findBy([], ['createdAt'=> 'DESC'], 4)
+            'articleList' => $repository->getBestRatedArticles(4)
         ]);
     }
 
@@ -31,6 +31,7 @@ class BlogController extends AbstractController
     public function details(
         Article $article,
         Request $request,
+        ArticleRepository $repository,
         EntityManagerInterface $em
     ): Response{
 
@@ -53,7 +54,8 @@ class BlogController extends AbstractController
 
         return  $this->render('blog/details.html.twig', [
             'article' => $article,
-            'commentForm' => $form->createView()
+            'commentForm' => $form->createView(),
+            'rating' => ceil($repository->getArticleAverageRating($article->getId()))
         ]);
     }
 
@@ -91,6 +93,15 @@ class BlogController extends AbstractController
         'articleList' => $repository->getArticlesByTag($tag),
             'title' => 'Liste des articles par tag',
             'crit' => $tag->getTagName()
+        ]);
+    }
+
+    #[Route('/by-year/{year}', name: 'by_year')]
+    public function byYear(int $year, ArticleRepository $repository):Response{
+        return $this->render('blog/list.html.twig', [
+            'articleList' => $repository->getArticlesByYear($year),
+            'title' => 'Liste des articles par années',
+            'crit' => $year
         ]);
     }
 

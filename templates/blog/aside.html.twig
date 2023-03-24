@@ -24,7 +24,7 @@
     <h4 class="mt-3">Liste des Années</h4>
     <div>
         {% for item in countByYear %}
-            <a href="">
+            <a href="{{ path('blog_by_year', {'year': item.yearPublished}) }}">
                 {{ item.yearPublished }}&nbsp;({{ item.nb }})
             </a>
         {% endfor %}

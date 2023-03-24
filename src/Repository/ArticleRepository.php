@@ -99,4 +99,34 @@ class ArticleRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function getArticlesByYear(int $year)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a')
+            ->where('year(a.publishedAt)=:year')
+            ->setParameter(':year', $year)
+            ->orderBy('a.publishedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getArticleAverageRating(int $id){
+        return $this->createQueryBuilder('a')
+            ->select('avg(c.rating) as rating')
+            ->join('a.comments', 'c')
+            ->where('a.id=:id')
+            ->setParameter(':id', $id)
+            ->groupBy('a.id')
+            ->getQuery()->getSingleScalarResult();
+    }
+
+    public function getBestRatedArticles(int $nb){
+        return $this->createQueryBuilder('a')
+            ->select('a, avg(c.rating) as HIDDEN rating')
+            ->join('a.comments', 'c')
+            ->orderBy('rating', 'DESC')
+            ->setMaxResults($nb)
+            ->groupBy('a.id')
+            ->getQuery()->getResult();
+    }
 }
