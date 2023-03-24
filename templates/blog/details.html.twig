@@ -5,7 +5,9 @@
     <h1>{{ article.title }}</h1>
     <p>
         Publié le {{ article.publishedAt | date('d/m/Y') }}
-        par {{ article.author.nickName }}
+        par <a href="{{ path('blog_by_author', {'id': article.author.id}) }}">
+            {{ article.author.nickName }}
+            </a>
         ({{ article.author.firstName }} {{ article.author.lastName | upper}})
         <br>
         theme : <a href="{{ path('blog_by_theme', {'id': article.theme.id}) }}">{{ article.theme.themeName }}</a>

@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Author;
 use App\Entity\Comment;
 use App\Entity\Theme;
+use App\Entity\User;
 use App\Form\CommentType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -57,13 +59,28 @@ class BlogController extends AbstractController
     #[Route('/by-theme/{id}', name: 'by_theme')]
     public function byTheme(
         Theme $theme,
-        ArticleRepository $repository){
+        ArticleRepository $repository): Response
+    {
         $articleList = $repository->findBy(['theme' => $theme]);
 
         return $this->render('blog/list.html.twig', [
             'articleList' => $articleList,
             'title' => 'Liste des articles par thèmes',
-            'theme' => $theme->getThemeName()
+            'crit' => $theme->getThemeName()
+        ]);
+    }
+
+    #[Route('/by-author/{id}', name: 'by_author')]
+    public  function byAuthor(
+        User $author,
+        ArticleRepository $repository): Response
+    {
+        $articleList = $repository->findBy(['author'=> $author]);
+
+        return $this->render('blog/list.html.twig', [
+            'articleList' => $articleList,
+            'title' => 'Liste des articles par auteur',
+            'crit' => $author->getNickName()
         ]);
     }
 }
