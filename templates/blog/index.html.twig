@@ -14,7 +14,7 @@
                 <p>
                     {{ article.content | slice(0, 20) }}...
                 </p>
-                <a>En savoir plus</a>
+                <a href="{{ path('blog_details', {'id': article.id}) }}">En savoir plus</a>
                 </div>
             </div>
         {% endfor %}

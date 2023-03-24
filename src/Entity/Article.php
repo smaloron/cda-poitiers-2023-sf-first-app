@@ -45,6 +45,7 @@ class Article
 
 
     #[ORM\OneToMany(mappedBy: 'article', targetEntity: Comment::class)]
+    #[ORM\OrderBy(['createdAt'=>'DESC'])]
     private Collection $comments;
 
 
