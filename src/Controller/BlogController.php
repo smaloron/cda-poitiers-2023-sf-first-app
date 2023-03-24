@@ -98,9 +98,12 @@ class BlogController extends AbstractController
     public function aside(ArticleRepository $repository){
         $countByAuthor = $repository->getArticlecountByAuthor()->getArrayResult();
 
+        dump($repository->getArticleCountByYear());
+
         return $this->render('blog/aside.html.twig', [
             'countByAuthor' => $countByAuthor,
-            'countByTag' => $repository->getArticleCountByTag()
+            'countByTag' => $repository->getArticleCountByTag(),
+            'countByYear' => $repository->getArticleCountByYear()
         ]);
     }
 }
