@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Comment;
+use App\Entity\Theme;
 use App\Form\CommentType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,6 +51,19 @@ class BlogController extends AbstractController
         return  $this->render('blog/details.html.twig', [
             'article' => $article,
             'commentForm' => $form->createView()
+        ]);
+    }
+
+    #[Route('/by-theme/{id}', name: 'by_theme')]
+    public function byTheme(
+        Theme $theme,
+        ArticleRepository $repository){
+        $articleList = $repository->findBy(['theme' => $theme]);
+
+        return $this->render('blog/list.html.twig', [
+            'articleList' => $articleList,
+            'title' => 'Liste des articles par thèmes',
+            'theme' => $theme->getThemeName()
         ]);
     }
 }

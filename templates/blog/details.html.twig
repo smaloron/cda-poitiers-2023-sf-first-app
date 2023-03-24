@@ -8,7 +8,7 @@
         par {{ article.author.nickName }}
         ({{ article.author.firstName }} {{ article.author.lastName | upper}})
         <br>
-        theme : {{ article.theme.themeName }}
+        theme : <a href="{{ path('blog_by_theme', {'id': article.theme.id}) }}">{{ article.theme.themeName }}</a>
     </p>
     <p>
         {% for tag in article.tags %}
