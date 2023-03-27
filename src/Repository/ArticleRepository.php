@@ -111,13 +111,18 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     public function getArticleAverageRating(int $id){
-        return $this->createQueryBuilder('a')
+        $result = $this->createQueryBuilder('a')
             ->select('avg(c.rating) as rating')
             ->join('a.comments', 'c')
             ->where('a.id=:id')
             ->setParameter(':id', $id)
             ->groupBy('a.id')
-            ->getQuery()->getSingleScalarResult();
+            ->getQuery()->getOneOrNullResult();
+        if($result ){
+            return $result['rating'];
+        } else {
+            return 0;
+        }
     }
 
     public function getBestRatedArticles(int $nb){

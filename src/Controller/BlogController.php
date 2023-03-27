@@ -120,12 +120,23 @@ class BlogController extends AbstractController
     }
 
     #[Route('/new', name: 'new_article')]
-    public function addEdit(){
+    public function addEdit(
+        Request $request,
+        EntityManagerInterface $em){
         $article = new Article();
 
         $form = $this->createForm(
             ArticleType::class, $article
         );
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $em->persist($article);
+            $em->flush();
+
+            return $this->redirectToRoute('blog_details', ['id' => $article->getId()]);
+        }
 
         return $this->render('blog/form.html.twig', [
            'title' => 'Nouvel article',

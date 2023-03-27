@@ -30,7 +30,7 @@ class Article
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $publishedAt = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -41,7 +41,7 @@ class Article
     #[ORM\JoinColumn(nullable: false)]
     private ?Theme $theme = null;
 
-    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'articles')]
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'articles', cascade: ['persist', 'remove'])]
     private Collection $tags;
 
 
@@ -201,7 +201,9 @@ class Article
 
     #[ORM\PrePersist]
     public function prePersistCallback(): void{
-        $this->createdAt = new \DateTime();
+        $date = new \DateTime();
+        $this->createdAt = $date;
+        $this->updatedAt = $date;
     }
 
     #[ORM\PreUpdate]
