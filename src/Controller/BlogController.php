@@ -120,10 +120,18 @@ class BlogController extends AbstractController
     }
 
     #[Route('/new', name: 'new_article')]
+    #[Route('/update/{id}', name: 'update_article', requirements: ['id'=>'\d+'])]
     public function addEdit(
         Request $request,
-        EntityManagerInterface $em){
-        $article = new Article();
+        EntityManagerInterface $em,
+        Article $article = null){
+
+        if($article === null){
+            $article = new Article();
+            $title = "Nouvel article";
+        } else {
+            $title = "Modification de l'article";
+        }
 
         $form = $this->createForm(
             ArticleType::class, $article
@@ -139,7 +147,7 @@ class BlogController extends AbstractController
         }
 
         return $this->render('blog/form.html.twig', [
-           'title' => 'Nouvel article',
+           'title' => $title,
            'articleForm' => $form->createView()
         ]);
     }

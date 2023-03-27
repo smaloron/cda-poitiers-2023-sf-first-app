@@ -14,7 +14,14 @@ class TagDataTransformer implements DataTransformerInterface
 
     public function transform(mixed $value)
     {
-        // TODO: Implement transform() method.
+        $tagArray = $value->toArray();
+        $tagArray = array_map(
+            function ($item){
+                return $item->getTagName();
+            },
+            $tagArray
+        );
+        return implode(', ', $tagArray);
     }
 
     public function reverseTransform(mixed $value)

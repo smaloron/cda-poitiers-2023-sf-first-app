@@ -4,6 +4,11 @@
 
     <h1>{{ article.title }}</h1>
     <p>
+        <a href="{{ path('blog_update_article', {'id': article.id}) }}">
+            modifier l'article
+        </a>
+    </p>
+    <p>
         Publié le {{ article.publishedAt | date('d/m/Y') }}
         par <a href="{{ path('blog_by_author', {'id': article.author.id}) }}">
             {{ article.author.nickName }}
