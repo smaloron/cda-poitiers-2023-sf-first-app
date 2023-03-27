@@ -8,6 +8,7 @@ use App\Entity\Comment;
 use App\Entity\Tag;
 use App\Entity\Theme;
 use App\Entity\User;
+use App\Form\ArticleType;
 use App\Form\CommentType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -115,6 +116,20 @@ class BlogController extends AbstractController
             'countByAuthor' => $countByAuthor,
             'countByTag' => $repository->getArticleCountByTag(),
             'countByYear' => $repository->getArticleCountByYear()
+        ]);
+    }
+
+    #[Route('/new', name: 'new_article')]
+    public function addEdit(){
+        $article = new Article();
+
+        $form = $this->createForm(
+            ArticleType::class, $article
+        );
+
+        return $this->render('blog/form.html.twig', [
+           'title' => 'Nouvel article',
+           'articleForm' => $form->createView()
         ]);
     }
 }
