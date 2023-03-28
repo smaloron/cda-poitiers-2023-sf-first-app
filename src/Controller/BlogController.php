@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\Form\ArticleType;
 use App\Form\CommentType;
 use App\Repository\ArticleRepository;
+use App\Service\ImageUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -129,6 +130,7 @@ class BlogController extends AbstractController
     public function addEdit(
         Request $request,
         EntityManagerInterface $em,
+        ImageUploader $uploader,
         Article $article = null
     ) {
 
@@ -152,15 +154,11 @@ class BlogController extends AbstractController
             $photoUpload = $form->get('photo')->getData();
 
             if($photoUpload instanceof UploadedFile){
-                $fileName = uniqid('photo_', true) . "." . $photoUpload->guessExtension();
-
-                // déplacement du fichier temporaire vers sa destination
-                $photoUpload->move(
-                    $this->getParameter('upload_directory'),
-                    $fileName
+                $uploader->process(
+                    $photoUpload,
+                    $article,
+                    "setPhoto"
                 );
-
-                $article->setPhoto($fileName);
             }
 
             $em->persist($article);
