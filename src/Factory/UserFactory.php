@@ -50,6 +50,7 @@ final class UserFactory extends ModelFactory
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
             'nickName' => self::faker()->lastName(),
+            'plainPassword' => '123'
         ];
     }
 

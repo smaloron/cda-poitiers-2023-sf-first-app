@@ -16,6 +16,17 @@ class BlogFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         UserFactory::createMany(15);
+        UserFactory::createOne([
+            'nickName' => 'user1'
+        ]);
+        UserFactory::createOne([
+            'nickName' => 'joe'
+        ]);
+        UserFactory::createOne([
+            'nickName' => 'beth'
+        ]);
+
+
 
         ThemeFactory::createOne(['themeName'=> 'Politique']);
         ThemeFactory::createOne(['themeName'=> 'Economie']);
