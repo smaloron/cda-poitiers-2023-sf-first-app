@@ -8,11 +8,13 @@ use App\Entity\User;
 use App\Form\Transformer\TagDataTransformer;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class ArticleType extends AbstractType
 {
@@ -38,6 +40,24 @@ class ArticleType extends AbstractType
             ->add('content', TextareaType::class, [
                 'label' => 'Contenu',
                 'attr' => ['rows' => '5']
+            ])
+
+            ->add('photo', FileType::class, [
+                'label' => 'Photo',
+                'help' => 'choisissez une photo pour illustrer l\'article',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'mimeTypes'=> [
+                            'image/jpeg',
+                            'image/png'
+                        ],
+                        'maxSize'=> '5000k',
+                        'mimeTypesMessage' => 'Uniquement de fichiers jpeg ou png',
+                        'maxSizeMessage' => 'Le fichier doit faire moins de 5 Mo'
+                    ])
+                ]
             ])
             ->add('Valider', SubmitType::class)
         ;
