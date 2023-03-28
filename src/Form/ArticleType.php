@@ -24,11 +24,14 @@ class ArticleType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, ['label' => 'Titre'])
+
+            /*
             ->add('author', EntityType::class, [
                 'label' => 'Auteur',
                 'class' => User::class,
                 'choice_label' => 'nickName'
             ])
+            */
             ->add('theme', EntityType::class, [
                 'label' => 'Thème',
                 'class' => Theme::class,

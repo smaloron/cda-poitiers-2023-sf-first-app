@@ -20,6 +20,8 @@
         <h1>Mon blog</h1>
     </header>
 
+    {{ include('_fragments/_user-info.html.twig') }}
+
     <form action="{{ path('blog_search') }}" method="GET">
         <input type="search" name="search" placeholder="votre recherche ici">
         <button type="submit">Valider</button>

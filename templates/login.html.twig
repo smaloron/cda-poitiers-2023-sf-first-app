@@ -1,0 +1,30 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+
+    <div>
+        {{ error }}
+    </div>
+
+    <h2>Login</h2>
+    <form action="{{ path('app_security_login') }}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Identifiant</label>
+            <input type="text" class="form-control" name="_username"
+            value="{{ userName }}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" name="_password">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+            Valider
+        </button>
+
+    </form>
+
+{% endblock %}
+
+
+

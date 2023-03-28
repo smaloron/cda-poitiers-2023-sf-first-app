@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/blog', name: 'blog_')]
 class BlogController extends AbstractController
@@ -125,6 +126,7 @@ class BlogController extends AbstractController
         ]);
     }
 
+    #[isGranted('ROLE_USER')]
     #[Route('/new', name: 'new_article')]
     #[Route('/update/{id}', name: 'update_article', requirements: ['id' => '\d+'])]
     public function addEdit(
@@ -136,6 +138,7 @@ class BlogController extends AbstractController
 
         if ($article === null) {
             $article = new Article();
+            $article->setAuthor($this->getUser());
             $title = "Nouvel article";
         } else {
             $title = "Modification de l'article";

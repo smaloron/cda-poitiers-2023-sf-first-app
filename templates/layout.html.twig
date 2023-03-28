@@ -23,6 +23,8 @@
 
     {{ include('_fragments/_navbar.html.twig') }}
 
+    {{ include('_fragments/_user-info.html.twig') }}
+
     <div class="mt-3">
         {% for message in app.flashes('success') %}
             <div class="alert alert-success m-2">

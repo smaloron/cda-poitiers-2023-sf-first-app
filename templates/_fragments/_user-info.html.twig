@@ -1,0 +1,12 @@
+<div>
+    {% if app.user is null %}
+        <a href="{{ path('app_security_login') }}">Connexion</a>
+    {% else %}
+        bonjour {{ app.user.firstName }} {{ app.user.lastName }}
+        <a href="{{ path('app_logout') }}">Déconnexion</a>
+    {% endif %}
+
+        {% if is_granted('ROLE_USER') %}
+                <a href="{{ path('blog_new_article') }}">Nouvel article</a>
+        {% endif %}
+</div>
