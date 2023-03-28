@@ -20,6 +20,11 @@
         <h1>Mon blog</h1>
     </header>
 
+    <form action="{{ path('blog_search') }}" method="GET">
+        <input type="search" name="search" placeholder="votre recherche ici">
+        <button type="submit">Valider</button>
+    </form>
+
     {% for message in app.flashes('error') %}
         <div class="alert alert-danger">
             {{ message }}

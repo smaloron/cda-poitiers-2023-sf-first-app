@@ -172,4 +172,16 @@ class BlogController extends AbstractController
             'articleForm' => $form->createView()
         ]);
     }
+
+    #[Route('/search', name: 'search', methods: ['GET'])]
+    public function search(Request $request, ArticleRepository $repository){
+        // Récupération de la saisie du formulaire
+        $searchInput = $request->query->get('search');
+
+        return $this->render('blog/list.html.twig', [
+            'articleList' => $repository->getSearchedArticles($searchInput),
+            'title' => 'Recherche libre des articles',
+            'crit' => $searchInput
+        ]);
+    }
 }

@@ -134,4 +134,23 @@ class ArticleRepository extends ServiceEntityRepository
             ->groupBy('a.id')
             ->getQuery()->getResult();
     }
+
+    public function getSearchedArticles(string $searchTerm){
+        return $this->createQueryBuilder('a')
+            ->join('a.author', 'u')
+            ->join('a.theme', 'th')
+            ->leftJoin('a.tags', 't')
+            ->leftJoin('a.comments', 'c')
+            ->select('a')
+            ->where('
+                a.title LIKE :search
+                or a.content LIKE :search
+                or th.themeName LIKE :search
+                or t.tagName LIKE :search
+                or c.content LIKE :search
+            ')
+            ->setParameter(':search', "%$searchTerm%")
+            ->getQuery()
+            ->getResult();
+    }
 }
