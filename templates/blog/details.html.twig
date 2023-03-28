@@ -24,6 +24,10 @@
             {{ tag.tagName }} :
         {% endfor %}
     </p>
+
+    {% if article.photo is not null %}
+        <img src="/upload/{{ article.photo }}">
+    {% endif %}
     <div>
         {{ article.content }}
     </div>

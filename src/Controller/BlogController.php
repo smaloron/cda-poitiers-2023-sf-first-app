@@ -13,6 +13,7 @@ use App\Form\CommentType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,32 +29,33 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'details', requirements: ['id'=> '\d+'])]
+    #[Route('/{id}', name: 'details', requirements: ['id' => '\d+'])]
     public function details(
         Article $article,
         Request $request,
         ArticleRepository $repository,
         EntityManagerInterface $em
-    ): Response{
+    ): Response {
 
         $comment = new Comment();
         $comment->setCreatedAt(new \DateTime())
-                ->setArticle($article);
+            ->setArticle($article);
 
         $form = $this->createForm(
-            CommentType::class, $comment
+            CommentType::class,
+            $comment
         );
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($comment);
             $em->flush();
 
-            return $this->redirectToRoute('blog_details', ['id'=>$article->getId()]);
+            return $this->redirectToRoute('blog_details', ['id' => $article->getId()]);
         }
 
-        return  $this->render('blog/details.html.twig', [
+        return $this->render('blog/details.html.twig', [
             'article' => $article,
             'commentForm' => $form->createView(),
             'rating' => ceil($repository->getArticleAverageRating($article->getId()))
@@ -63,8 +65,8 @@ class BlogController extends AbstractController
     #[Route('/by-theme/{id}', name: 'by_theme')]
     public function byTheme(
         Theme $theme,
-        ArticleRepository $repository): Response
-    {
+        ArticleRepository $repository
+    ): Response {
         $articleList = $repository->findBy(['theme' => $theme]);
 
         return $this->render('blog/list.html.twig', [
@@ -75,11 +77,11 @@ class BlogController extends AbstractController
     }
 
     #[Route('/by-author/{id}', name: 'by_author')]
-    public  function byAuthor(
+    public function byAuthor(
         User $author,
-        ArticleRepository $repository): Response
-    {
-        $articleList = $repository->findBy(['author'=> $author]);
+        ArticleRepository $repository
+    ): Response {
+        $articleList = $repository->findBy(['author' => $author]);
 
         return $this->render('blog/list.html.twig', [
             'articleList' => $articleList,
@@ -89,16 +91,18 @@ class BlogController extends AbstractController
     }
 
     #[Route('/by-tag/{id}', name: 'by_tag')]
-    public function  byTag(Tag $tag, ArticleRepository $repository): Response {
+    public function byTag(Tag $tag, ArticleRepository $repository): Response
+    {
         return $this->render('blog/list.html.twig', [
-        'articleList' => $repository->getArticlesByTag($tag),
+            'articleList' => $repository->getArticlesByTag($tag),
             'title' => 'Liste des articles par tag',
             'crit' => $tag->getTagName()
         ]);
     }
 
     #[Route('/by-year/{year}', name: 'by_year')]
-    public function byYear(int $year, ArticleRepository $repository):Response{
+    public function byYear(int $year, ArticleRepository $repository): Response
+    {
         return $this->render('blog/list.html.twig', [
             'articleList' => $repository->getArticlesByYear($year),
             'title' => 'Liste des articles par années',
@@ -107,7 +111,8 @@ class BlogController extends AbstractController
     }
 
     #[Route('/aside', name: 'aside')]
-    public function aside(ArticleRepository $repository){
+    public function aside(ArticleRepository $repository)
+    {
         $countByAuthor = $repository->getArticlecountByAuthor()->getArrayResult();
 
         dump($repository->getArticleCountByYear());
@@ -120,13 +125,14 @@ class BlogController extends AbstractController
     }
 
     #[Route('/new', name: 'new_article')]
-    #[Route('/update/{id}', name: 'update_article', requirements: ['id'=>'\d+'])]
+    #[Route('/update/{id}', name: 'update_article', requirements: ['id' => '\d+'])]
     public function addEdit(
         Request $request,
         EntityManagerInterface $em,
-        Article $article = null){
+        Article $article = null
+    ) {
 
-        if($article === null){
+        if ($article === null) {
             $article = new Article();
             $title = "Nouvel article";
         } else {
@@ -134,12 +140,29 @@ class BlogController extends AbstractController
         }
 
         $form = $this->createForm(
-            ArticleType::class, $article
+            ArticleType::class,
+            $article
         );
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
+            // traitement de l'upload
+            /** @var UploadedFile $photoUpload */
+            $photoUpload = $form->get('photo')->getData();
+
+            if($photoUpload instanceof UploadedFile){
+                $fileName = uniqid('photo_', true) . "." . $photoUpload->guessExtension();
+
+                // déplacement du fichier temporaire vers sa destination
+                $photoUpload->move(
+                    $this->getParameter('upload_directory'),
+                    $fileName
+                );
+
+                $article->setPhoto($fileName);
+            }
+
             $em->persist($article);
             $em->flush();
 
@@ -147,8 +170,8 @@ class BlogController extends AbstractController
         }
 
         return $this->render('blog/form.html.twig', [
-           'title' => $title,
-           'articleForm' => $form->createView()
+            'title' => $title,
+            'articleForm' => $form->createView()
         ]);
     }
 }

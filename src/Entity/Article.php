@@ -49,6 +49,9 @@ class Article
     #[ORM\OrderBy(['createdAt'=>'DESC'])]
     private Collection $comments;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
+
 
     public function __construct()
     {
@@ -209,5 +212,17 @@ class Article
     #[ORM\PreUpdate]
     public function preUpdateCallback(): void{
         $this->updatedAt = new \DateTime();
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
     }
 }
