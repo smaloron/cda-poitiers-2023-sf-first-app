@@ -11,8 +11,10 @@ use App\Entity\User;
 use App\Form\ArticleType;
 use App\Form\CommentType;
 use App\Repository\ArticleRepository;
+use App\Security\Voter\ArticleVoter;
 use App\Service\ImageUploader;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,38 +33,7 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'details', requirements: ['id' => '\d+'])]
-    public function details(
-        Article $article,
-        Request $request,
-        ArticleRepository $repository,
-        EntityManagerInterface $em
-    ): Response {
 
-        $comment = new Comment();
-        $comment->setCreatedAt(new \DateTime())
-            ->setArticle($article);
-
-        $form = $this->createForm(
-            CommentType::class,
-            $comment
-        );
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($comment);
-            $em->flush();
-
-            return $this->redirectToRoute('blog_details', ['id' => $article->getId()]);
-        }
-
-        return $this->render('blog/details.html.twig', [
-            'article' => $article,
-            'commentForm' => $form->createView(),
-            'rating' => ceil($repository->getArticleAverageRating($article->getId()))
-        ]);
-    }
 
     #[Route('/by-theme/{id}', name: 'by_theme')]
     public function byTheme(
@@ -93,10 +64,21 @@ class BlogController extends AbstractController
     }
 
     #[Route('/by-tag/{id}', name: 'by_tag')]
-    public function byTag(Tag $tag, ArticleRepository $repository): Response
+    public function byTag(
+        Tag $tag,
+        ArticleRepository $repository,
+        PaginatorInterface $paginator,
+        Request $request): Response
     {
+
+        $pagination = $paginator->paginate(
+            $repository->getArticlesByTag($tag),
+            $request->query->getInt('page', 1),
+            5
+        );
+
         return $this->render('blog/list.html.twig', [
-            'articleList' => $repository->getArticlesByTag($tag),
+            'articleList' => $pagination,
             'title' => 'Liste des articles par tag',
             'crit' => $tag->getTagName()
         ]);
@@ -140,7 +122,10 @@ class BlogController extends AbstractController
             $article = new Article();
             $article->setAuthor($this->getUser());
             $title = "Nouvel article";
+            $this->denyAccessUnlessGranted(ArticleVoter::ADD, $article);
         } else {
+            // Vote pour l'accès à la modification
+            $this->denyAccessUnlessGranted(ArticleVoter::EDIT, $article);
             $title = "Modification de l'article";
         }
 
@@ -185,6 +170,39 @@ class BlogController extends AbstractController
             'articleList' => $repository->getSearchedArticles($searchInput),
             'title' => 'Recherche libre des articles',
             'crit' => $searchInput
+        ]);
+    }
+
+    #[Route('/{slug}', name: 'details')]
+    public function details(
+        Article $article,
+        Request $request,
+        ArticleRepository $repository,
+        EntityManagerInterface $em
+    ): Response {
+
+        $comment = new Comment();
+        $comment->setCreatedAt(new \DateTime())
+            ->setArticle($article);
+
+        $form = $this->createForm(
+            CommentType::class,
+            $comment
+        );
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($comment);
+            $em->flush();
+
+            return $this->redirectToRoute('blog_details', ['id' => $article->getId()]);
+        }
+
+        return $this->render('blog/details.html.twig', [
+            'article' => $article,
+            'commentForm' => $form->createView(),
+            'rating' => ceil($repository->getArticleAverageRating($article->getId()))
         ]);
     }
 }

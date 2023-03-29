@@ -6,6 +6,7 @@
 parameters:
     number_of_rows: 5
     upload_directory: '%kernel.project_dir%/public/upload/'
+    max_number_of_article_by_day: 3
 
 services:
     # default configuration for services in *this* file
@@ -28,3 +29,7 @@ services:
     App\Service\ImageUploader:
         arguments:
             $targetFolder: '%upload_directory%'
+
+    App\Security\Voter\ArticleVoter:
+        arguments:
+            $maxArticles: '%max_number_of_article_by_day%'

@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Article;
 use App\Entity\Tag;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -72,7 +74,7 @@ class ArticleRepository extends ServiceEntityRepository
             ->join('a.tags', 't')
             ->where('t.tagName=:tagName')
             ->setParameter(':tagName', $tag->getTagName())
-            ->getQuery()->getResult();
+            ->getQuery();
     }
 
 //    /**
@@ -152,5 +154,27 @@ class ArticleRepository extends ServiceEntityRepository
             ->setParameter(':search', "%$searchTerm%")
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function getCreatedArticleCountToday(User $user){
+        $today = new \DateTime();
+        $result = $this->createQueryBuilder('article')
+            ->join('article.author', 'author')
+            ->select('count(article.id) as nb')
+            ->groupBy('article.author')
+            ->andWhere('author.id= :authorId')
+            ->andWhere('article.createdAt BETWEEN :start AND :end')
+            ->setParameter(':authorId', $user->getId())
+            ->setParameter(':start', $today->format('Y-m-d 0:0:0'))
+            ->setParameter(':end',$today->format('Y-m-d 23:59:59'))
+            ->getQuery()->getOneOrNullResult();
+
+        if($result === null){
+            return 0;
+        }
+        return $result['nb'];
     }
 }

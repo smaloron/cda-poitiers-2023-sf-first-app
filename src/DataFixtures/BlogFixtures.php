@@ -63,5 +63,6 @@ class BlogFixtures extends Fixture
                 ];
             }
         );
+
     }
 }

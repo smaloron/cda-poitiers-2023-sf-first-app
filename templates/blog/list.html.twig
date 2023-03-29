@@ -9,7 +9,15 @@
             <tr>
                 <th>Titre</th>
                 <td>Auteur</td>
-                <td>Date de publication</td>
+                <td
+                class="{{ articleList.isSorted('a.publishedAt')? 'sorted': '' }}"
+                >
+                    {{ knp_pagination_sortable(
+                        articleList,
+                        'Date de publication',
+                        'a.publishedAt'
+                    ) }}
+                </td>
                 <td>Nombre de commentaires</td>
             </tr>
         </thead>
@@ -17,7 +25,7 @@
             {% for article in articleList %}
                 <tr>
                     <td>
-                        <a href="{{ path('blog_details', {'id': article.id}) }}">
+                        <a href="{{ path('blog_details', {'slug': article.slug}) }}">
                         {{ article.title }}
                         </a>
                     </td>
@@ -28,6 +36,9 @@
             {% endfor %}
         </tbody>
     </table>
+
+
+    {{ knp_pagination_render(articleList) }}
 
 {% endblock %}
 

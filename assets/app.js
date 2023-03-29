@@ -9,6 +9,8 @@
 import './styles/app.css';
 import  '../node_modules/bootstrap/dist/css/bootstrap.css';
 
+import '../node_modules/material-design-icons-iconfont/dist/material-design-icons.css';
+
 import '../node_modules/bootstrap/dist/js/bootstrap';
 // start the Stimulus application
 import './bootstrap';
